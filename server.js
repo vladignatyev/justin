@@ -1,42 +1,35 @@
 var net = require('net');
 var config = require('./config/config.js');
+var justin = require('./justin/justin.js');
+var lang = require('./justin/lang/' + config.Configuration.LOCALE + '/strings.js');
 
-var server = net.createServer(function (c) {
-  c.write('hello\r\n');
-  c.pipe(c);
-  console.log(c);
-  c.close();
-});
+var server = net.createServer(justin.Justin.handleRequest);
 
-
-server.restart = function () {
+server.boot = function () {
 	try {
 		server.close();
 	} catch (e) {
-		console.log("\n ---------------------");
-		console.log("/Justin socket server/");
-		console.log("---------------------\n");
-		
+		console.log(lang.Strings.HELLO_MSG);
 	}
+	
 	if (config.Configuration.LISTEN_SOCKET != '') {
 		server.listen(config.Configuration.LISTEN_SOCKET);
-		console.log ("Started listening on unix socket" + config.Configuration.LISTEN_SOCKET);
+		console.log (lang.Strings.STARTED_LISTENING_SOCKET + config.Configuration.LISTEN_SOCKET);
 	} else {
 		server.listen(config.Configuration.LISTEN_PORT, 'localhost');
-		console.log ("Started listening on port " + config.Configuration.LISTEN_PORT);
+		console.log (lang.Strings.STARTED_LISTENING_PORT + config.Configuration.LISTEN_PORT);
 	}
-
 };
 
 server.on ('error', function (e) {
 	if (e.code == 'EADDRINUSE') {
 		if (config.Configuration.LISTEN_PORT) {
-			console.log('[ERROR] Port ' + config.Configuration.LISTEN_PORT + ' is already in use. Unable to bind.');
+			console.log(lang.Strings.PORT_IN_USE(config.Configuration.LISTEN_PORT));
 			setTimeout(function () {
 				server.restart();
-		    }, 1000);
+		    }, config.Configuration.RETRY_TIMEOUT);
 		}
 	}
 });
 
-server.restart();
+server.boot();
