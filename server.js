@@ -3,7 +3,7 @@ var config = require('./config/config.js');
 var justin = require('./justin/justin.js');
 var lang = require('./justin/lang/' + config.Configuration.LOCALE + '/strings.js');
 
-var server = net.createServer(justin.Justin.handleRequest);
+var server = net.createServer(justin.Justin.handleConnection);
 
 server.boot = function () {
 	try {
