@@ -2,7 +2,7 @@ var c = require('./core/controller.js');
 
 /**
  * Justin connection management singleton.
- * It manages connection and provide entry point for data processing loop.
+ * It manages connections and provide entry point for data processing loop.
  * */
 var Justin = {
 	/*Connections pool*/

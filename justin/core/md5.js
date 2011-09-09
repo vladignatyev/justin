@@ -160,15 +160,3 @@ function add32(a, b) {
  * MD5 function for binary raw data
  * */
 exports.md5 = md5;
-
-/**
- * Converts source string to binary buffer for MD5 
- * @param str source string
- * */
-exports.strToRaw = function (str) {
-	var buf = [];
-	for (var i = 0; i < str.length; i++) {
-		buf.push(str.charCodeAt(i));
-	}
-	return buf;
-}

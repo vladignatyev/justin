@@ -9,25 +9,31 @@ function Connection (justin, socket) {
 	 * */
 	this.emitter = new EventEmitter();
 	
+	/**
+	 * Array of unparsed packets
+	 * */
+	this.packets = [];
+	
 	this.socket = socket;
 	this.justin = justin;
-	
-	this.verifySignature = function (sign, pkgData) {
-		return true;
-	};
 	
 	this.handleData = function (buffer) {
 		this.write(sig.md5(sig.strToRaw(buffer.toString('ascii'))));
 	};
 	
-	this.handlePackage = function (sign, pkgData) {
-		if (!instance.verifySignature(sign, pkgData)) {
+	this.handlePacket = function (sign, pktData) {
+		
+		if (!instance.verifySignature(sign, parsedData)) {
 			instance.justin.closeConnection(instance);
 		}
-	}
+	};
+	
+	this.verifySignature = function (sign, pktData) {
+		return true;
+	};
 	
 	this.socket.on('data', this.handleData);
-	this.emitter.on('packageAccepted', this.handlePackage);
+	this.emitter.on('packageAccepted', this.handlePacket);
 };
 
 exports.Connection = Connection;
