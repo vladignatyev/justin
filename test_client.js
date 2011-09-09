@@ -19,8 +19,11 @@ socket.connect(8124, 'localhost', function(){
 	socket.write(packetProvider.provideRawPacket(pubSig, data));
 });*/
 
-var p = require ('./justin/core/protocol.js');
+/*var p = require ('./justin/core/protocol.js');
 
 var buffer = new Buffer([1,2,3]);
 var result = buffer.merge(new Buffer([4,5,6]));
-console.log(result);
+console.log(result);*/
+
+var md5 = require('./justin/core/md5.js').md5('hello');
+console.log(new Buffer(md5));

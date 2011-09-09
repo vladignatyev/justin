@@ -149,6 +149,10 @@ function hex(x) {
 }
 
 function md5(buffer) {
+	return md51(buffer);
+}
+
+function md5Str(buffer) {
 	return hex(md51(buffer));
 }
 
@@ -160,3 +164,4 @@ function add32(a, b) {
  * MD5 function for binary raw data
  * */
 exports.md5 = md5;
+exports.md5Str = md5Str;
