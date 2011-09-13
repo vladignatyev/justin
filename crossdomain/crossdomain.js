@@ -7,11 +7,10 @@
 
 var fs = require('fs');
 
-exports.CrossdomainServer = function () {
-	var Configuration = require('../config/config.js').Configuration;
+exports.CrossdomainServer = function (policyFilePath, socketPort, policyPort, policyHost) {
 	var policyFile = this.policyFile = 
-		fs.readFileSync(Configuration.Flash.POLICY_FILEPATH || 'config/crossdomain.xml', 'utf-8')
-		.replace("%{Configuration.LISTEN_PORT}", Configuration.LISTEN_PORT);
+		fs.readFileSync(policyFilePath, 'utf-8')
+		.replace("%{LISTEN_PORT}", socketPort);
 	
 	this.connectionHandler = function (request, response) {
 		response.writeHead(200, {'Content-Type': 'text/xml'});
@@ -19,5 +18,10 @@ exports.CrossdomainServer = function () {
 	};
 	
 	var server = require('http').createServer(this.connectionHandler);
-	server.listen(Configuration.Flash.POLICY_PORT, Configuration.Flash.POLICY_HOST);
+	
+	if (policyHost != '') {
+		server.listen(policyPort, policyHost);
+	} else {
+		server.listen(policyPort);
+	}
 };
