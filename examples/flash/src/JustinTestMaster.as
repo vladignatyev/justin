@@ -17,8 +17,8 @@ package
 		
 		public function JustinTestMaster()
 		{
-			this.addEventListener(Event.ADDED_TO_STAGE, init);
 			Security.loadPolicyFile('http://localhost:843/');
+			this.addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 		
 		private function init (event:Event):void {

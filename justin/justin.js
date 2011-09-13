@@ -8,6 +8,8 @@ function Connection (justin, socket) {
 
 	var instance = this;
 	
+	
+	
 	this.setMaster = function (masterConnection) {
 		if (this.master !== masterConnection) {
 			if (this.master != null) {
@@ -16,19 +18,28 @@ function Connection (justin, socket) {
 			
 			this.master = masterConnection;
 			
+			var instance = this;
+			
 			if (masterConnection != null) {
 				this.master.socket.on('data', this.handleData);
 			}
 		}
 	};
 	
+	this.handleSocketClose = function () {
+		if (instance.master) {
+			instance.master.socket.removeListener('data', instance.handleData);
+		}
+	};
+	
 	this.handleData = function (dataBuffer) {
-		if (!instance.socket) {
-			instance.master.socket.removeListener('data', this.handleData);
+		if (!dataBuffer) {
 			return;
 		}
 		instance.socket.write(dataBuffer);
 	};
+	
+	this.socket.on('close', this.handleSocketClose);
 };
 
 /**
