@@ -46,6 +46,11 @@ var Justin = {
 	closeConnection: function (connection) {
 		connection.socket.end();
 		Justin.connections.splice(Justin.connections.indexOf(connection), 1);
+		Justin.connections.forEach (function(connectionObj, index, connections){
+			// If master died, reset master to first connection in connection pool.
+			// I know it's bad solution, but for simplicity be this way.
+			connectionObj.setMaster(Justin.connections[0]);	
+		});
 	}
 };
 

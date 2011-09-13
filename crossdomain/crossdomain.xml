@@ -3,5 +3,5 @@
 <!-- Policy file for Justin Broadcasting Server instance -->
 <cross-domain-policy>
    <site-control permitted-cross-domain-policies="master-only"/>
-   <allow-access-from domain="localhost" to-ports="%{LISTEN_PORT}" />
+   <allow-access-from domain="*" to-ports="%{LISTEN_PORT}" />
 </cross-domain-policy>        
