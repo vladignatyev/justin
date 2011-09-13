@@ -16,8 +16,10 @@ package
 		}
 		
 		private function socketDataHandler(event:ProgressEvent):void {
-			draggable.x = justin.readFloat();
-			draggable.y = justin.readFloat();
+			while (justin.bytesAvailable) {
+				draggable.x = justin.readFloat();
+				draggable.y = justin.readFloat();
+			}
 		}
 	}
 }

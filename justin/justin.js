@@ -23,6 +23,10 @@ function Connection (justin, socket) {
 	};
 	
 	this.handleData = function (dataBuffer) {
+		if (!instance.socket) {
+			instance.master.socket.removeListener('data', this.handleData);
+			return;
+		}
 		instance.socket.write(dataBuffer);
 	};
 };
@@ -46,6 +50,7 @@ var Justin = {
 	closeConnection: function (connection) {
 		connection.socket.end();
 		Justin.connections.splice(Justin.connections.indexOf(connection), 1);
+		connection = null;
 		Justin.connections.forEach (function(connectionObj, index, connections){
 			// If master died, reset master to first connection in connection pool.
 			// I know it's bad solution, but for simplicity be this way.
