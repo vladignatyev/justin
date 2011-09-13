@@ -7,7 +7,6 @@ var net = require('net');
 var config = require('./config/config.js');
 var justin = require('./justin/justin.js');
 var lang = require('./justin/lang/' + config.Configuration.LOCALE + '/strings.js');
-var memcache = require('./memcache/memcache.js');
 
 function bootServer(server) {
 	if (config.Configuration.LISTEN_SOCKET != '') {
@@ -39,29 +38,9 @@ function handleErrors(server) {
  * */
 function main (argc, argv) {
 	console.log(lang.Strings.HELLO_MSG);
-	
-	var storage = new memcache.Client(config.Storage.PORT, config.Storage.HOST);
-	storage.on('connect', function(){
-		justin.Justin.setStorage(storage);
-		
-		var server = net.createServer(justin.Justin.handleConnection);
-		handleErrors(server);
-		bootServer(server);
-		
-		storage.on('timeout', function(){
-		    // no arguments - socket timed out
-		});
-		
-		storage.on('close', function(){
-		    server.close();
-		});
-	});
-
-	storage.on('error', function(e){
-	    console.log(lang.Strings.STORAGE_INITIALIZATION_ERROR);
-	});
-	
-	storage.connect();
+	var server = net.createServer(justin.Justin.handleConnection);
+	handleErrors(server);
+	bootServer(server);
 }
 
 main(process.argv.length, process.argv);
