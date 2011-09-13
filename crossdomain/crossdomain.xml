@@ -2,6 +2,6 @@
 <!DOCTYPE cross-domain-policy SYSTEM "/xml/dtds/cross-domain-policy.dtd">
 <!-- Policy file for Justin Broadcasting Server instance -->
 <cross-domain-policy>
-   <site-control permitted-cross-domain-policies="master-only"/>
-   <allow-access-from domain="*" to-ports="%{LISTEN_PORT}" />
+	<site-control permitted-cross-domain-policies="all"/>
+	<allow-access-from domain="*" to-ports="%{LISTEN_PORT}" secure="false"/>
 </cross-domain-policy>        
