@@ -1,6 +1,6 @@
 /**
  * 
- * Entry for running Justin Server
+ * Entry for running Justin Socket Broadcaster Server
  *  
  * */
 var net = require('net');
