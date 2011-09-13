@@ -4,28 +4,28 @@
  *  
  * */
 var net = require('net');
-var config = require('./config/config.js');
-var justin = require('./justin/justin.js');
-var lang = require('./justin/lang/' + config.Configuration.LOCALE + '/strings.js');
+var Config = require('./config/config.js').Configuration;
+var Justin = require('./justin/justin.js').Justin;
+var lang = require('./justin/lang/' + Config.LOCALE + '/strings.js');
 
 function bootServer(server) {
-	if (config.Configuration.LISTEN_SOCKET != '') {
-		server.listen(config.Configuration.LISTEN_SOCKET);
-		console.log (lang.Strings.STARTED_LISTENING_SOCKET + config.Configuration.LISTEN_SOCKET);
+	if (Config.LISTEN_SOCKET != '') {
+		server.listen(Config.LISTEN_SOCKET);
+		console.log (lang.Strings.STARTED_LISTENING_SOCKET + Config.LISTEN_SOCKET);
 	} else {
-		server.listen(config.Configuration.LISTEN_PORT, 'localhost');
-		console.log (lang.Strings.STARTED_LISTENING_PORT + config.Configuration.LISTEN_PORT);
+		server.listen(Config.LISTEN_PORT, 'localhost');
+		console.log (lang.Strings.STARTED_LISTENING_PORT + Config.LISTEN_PORT);
 	}
 }
 
 function handleErrors(server) {
 	server.on ('error', function (e) {
 		if (e.code == 'EADDRINUSE') {
-			if (config.Configuration.LISTEN_PORT) {
-				console.log(lang.Strings.PORT_IN_USE(config.Configuration.LISTEN_PORT));
+			if (Config.LISTEN_PORT) {
+				console.log(lang.ErrorStrings.PORT_IN_USE(Config.LISTEN_PORT));
 				setTimeout(function () {
 					server.restart();
-			    }, config.Configuration.RESTART_TIMEOUT);
+			    }, Config.RESTART_TIMEOUT);
 			}
 		}
 	});
@@ -38,9 +38,13 @@ function handleErrors(server) {
  * */
 function main (argc, argv) {
 	console.log(lang.Strings.HELLO_MSG);
-	var server = net.createServer(justin.Justin.handleConnection);
-	handleErrors(server);
-	bootServer(server);
+	var justin = net.createServer(Justin.handleConnection);
+	handleErrors(justin);
+	bootServer(justin);
+	
+	if (Config.Flash.POLICY) {
+		var crossdomain = new require('./justin/crossdomain.js').CrossdomainServer();
+	}
 }
 
 main(process.argv.length, process.argv);

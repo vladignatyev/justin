@@ -50,4 +50,3 @@ var Justin = {
 };
 
 exports.Justin = Justin;
-
