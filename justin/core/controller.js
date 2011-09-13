@@ -1,39 +1,34 @@
 var sig = require('./md5.js');
 var EventEmitter = require('events').EventEmitter;
 
+var random = require('./random.js');
+var protocol = require('./protocol.js');
+
 function Connection (justin, socket) {
 	var instance = this;
-	
-	/**
-	 * Emitter for package accepting events
-	 * */
-	this.emitter = new EventEmitter();
-	
-	/**
-	 * Array of unparsed packets
-	 * */
-	this.packets = [];
-	
 	this.socket = socket;
 	this.justin = justin;
 	
-	this.handleData = function (buffer) {
-		this.write(sig.md5(sig.strToRaw(buffer.toString('ascii'))));
+	this.packetProvider = new protocol.PacketProvider();
+	this.packetParser = new protocol.PacketParser();
+	
+	this.connectionUnique = random.get();
+	
+	this.handleDataPacket = function (pktData) {
+//		if (!instance.verifySignature(sign, parsedData)) {
+//			instance.justin.closeConnection(instance);
+//		}
 	};
 	
-	this.handlePacket = function (sign, pktData) {
+	this.init = function () {
+		this.packetParser.on('clientData', this.handleDataPacket);
+		this.packetParser.on('clientCommand', this.handleDataPacket);
+		this.packetParser.on('clientHandshake', this.handleDataPacket);
 		
-		if (!instance.verifySignature(sign, parsedData)) {
-			instance.justin.closeConnection(instance);
-		}
+		this.socket.write(instance.packetProvider.getServerHandshake(this.connectionUnique));
 	};
 	
-	this.verifySignature = function (sign, pktData) {
-		return true;
-	};
-	
-	this.socket.on('data', this.handleData);
-	this.emitter.on('packageAccepted', this.handlePacket);
+	this.init();
 };
 
 exports.Connection = Connection;

@@ -25,5 +25,38 @@ var buffer = new Buffer([1,2,3]);
 var result = buffer.merge(new Buffer([4,5,6]));
 console.log(result);*/
 
-var md5 = require('./justin/core/md5.js').md5('hello');
-console.log(new Buffer(md5));
+/*
+var random = require('./justin/core/random.js');
+
+
+var values = [];
+var count = 5E3;
+
+for (var i = 0; i < count; i++) {
+	console.log(random.get());
+//	values.push(random.get());
+}
+console.log('calculated');
+
+
+var collisions = [];
+var collisionsCount = 0;
+for (var i = 0; i < values.length; i++) {
+	if (isNaN(collisions[values[i].toString()])) 
+		collisions[values[i].toString()] = true;
+	else {
+		collisionsCount++;
+	}
+}
+
+console.log('Totally ' + collisionsCount + ':' + count);
+
+//var fs = require('fs');
+//var f = fs.openSync('data.rnd', 'w');
+//var buffer = '';
+//for (var i = 0; i < values.length; i++) {
+//	buffer += values[i].toString() + "\n";
+//}
+//fs.writeSync(f, buffer, 0);
+//fs.close(f);
+*/

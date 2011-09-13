@@ -9,5 +9,7 @@ exports.Strings = {
 		"Started listening on port ",
 	PORT_IN_USE: function(port) { 
 		return '[ERROR] Port ' + port + ' is already in use. Unable to bind.'
-	}
+	},
+	STORAGE_INITIALIZATION_ERROR:
+		"unable to start server due to storage connection fail"
 };

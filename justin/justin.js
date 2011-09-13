@@ -1,4 +1,5 @@
 var c = require('./core/controller.js');
+var topic = require('./core/topic.js');
 
 /**
  * Justin connection management singleton.
@@ -6,18 +7,38 @@ var c = require('./core/controller.js');
  * */
 var Justin = {
 	/*Connections pool*/
-	pool: new Array(),
+	connections: [],
+	
+	/*Opened topics*/
+	topics: [],
+	
+	storage: null,
+	
+	setStorage: function (storage) {
+		this.storage = storage;
+	},
+	
+	createTopic: function () {
+		new topic.Topic()
+	},
+	
+	findTopic: function () {
+		
+	},
 	
 	handleConnection: function (socket) {
 		var connectionObj = new c.Connection(Justin, socket);
 		socket.on('end', function(){
 			Justin.closeConnection(connectionObj);
 		});
-		Justin.pool.push(connectionObj);
+		Justin.connections.push(connectionObj);
+		console.log(Justin.connections);
+		console.log(Justin);
 	},
+	
 	closeConnection: function (connection) {
 		connection.socket.close();
-		Justin.pool.splice(Justin.pool.indexOf(connection), 1);
+		Justin.connections.splice(Justin.pool.indexOf(connection), 1);
 	}
 };
 
